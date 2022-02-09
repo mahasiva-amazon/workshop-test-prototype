@@ -18,10 +18,10 @@ jobs:
     - name: configure aws credentials
       uses: aws-actions/configure-aws-credentials@v1
       with:
-        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        role-to-assume: arn:aws:iam::785487814634:role/github-actions-workshop-test
         role-session-name: GithubActionsSession
         #role-duration-seconds: 900
-        aws-region: ${{ secrets.AWS_REGION }}
+        aws-region: us-west-2
     - run: aws sts get-caller-identity
     - name: Install eksctl
       run: |
