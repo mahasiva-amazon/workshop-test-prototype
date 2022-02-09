@@ -89,6 +89,8 @@ NAME                                 READY     STATUS    RESTARTS   AGE
 mywebserver-nginx-85985c8466-tczst   1/1       Running   0          10s
 {{< /output >}}
 
+Some changed content
+
 The third object that this Chart creates for us is a
 [Service](https://kubernetes.io/docs/concepts/services-networking/service/). A
 Service enables us to contact this nginx web server from the Internet, via an
