@@ -50,7 +50,7 @@ jobs:
       run: |
         export CLUSTER_NAME="workshop-test-${BUILD_ID}"
         envsubst '$CLUSTER_NAME' <cluster.yml.tmpl >cluster.yml
-        ./eksctl create cluster -f cluster.yml --dry-run
+        eksctl create cluster -f cluster.yml --dry-run
     #- name: Delete EKS cluster
     #  run: |
     #    ./eksctl delete cluster -f cluster.yml
