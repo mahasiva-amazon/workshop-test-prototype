@@ -19,13 +19,6 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         node-version: '17'
-    - name: configure aws credentials
-      uses: aws-actions/configure-aws-credentials@v1.6.1
-      with:
-        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-        role-duration-seconds: 7200
-        aws-region: ${{ secrets.AWS_REGION }}
-        role-session-name: GithubActionsSession
     - name: Setup PATH
       run: |
        mkdir -p ${HOME}/.local/bin
@@ -44,6 +37,13 @@ jobs:
       with:
         version: 'v3.8.0'
       id: install
+    - name: Get AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1.6.1
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        role-duration-seconds: 7200
+        aws-region: ${{ secrets.AWS_REGION }}
+        role-session-name: GithubActionsSession
     - name: Init EKS cluster
       timeout-minutes: 60
       env:
@@ -52,12 +52,26 @@ jobs:
         export CLUSTER_NAME="workshop-test-${BUILD_ID}"
         envsubst '$CLUSTER_NAME' <cluster.yml.tmpl >cluster.yml
         eksctl create cluster -f cluster.yml
+    - name: Refresh AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1.6.1
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        role-duration-seconds: 7200
+        aws-region: ${{ secrets.AWS_REGION }}
+        role-session-name: GithubActionsSession
     - run: npm install
     - name: Run Tests
       run: CONTENT_PATH=../testcontent npm test
+    - name: Refresh AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1.6.1
+      with:
+        role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+        role-duration-seconds: 7200
+        aws-region: ${{ secrets.AWS_REGION }}
+        role-session-name: GithubActionsSession
     - name: Cleanup
       if: always()
-      timeout-minutes: 30
+      timeout-minutes: 20
       run: |
         if [ -f cluster.yml ]; then
           eksctl delete cluster -f cluster.yml
