@@ -6,6 +6,8 @@ metadata:
   name: ${CLUSTER_NAME}
   region: us-west-2
   version: '1.21'
+  tags:
+    eksworkshop.com/build-id: ${CLUSTER_NAME}
 
 managedNodeGroups:
 - name: base
