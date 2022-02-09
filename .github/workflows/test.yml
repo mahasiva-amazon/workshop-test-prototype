@@ -29,9 +29,9 @@ jobs:
     - run: aws sts get-caller-identity
     - name: Install eksctl
       run: |
-        wget https://github.com/weaveworks/eksctl/releases/download/v0.82.0/eksctl_Linux_amd64.tar.gz
+        wget -q https://github.com/weaveworks/eksctl/releases/download/v0.82.0/eksctl_Linux_amd64.tar.gz
         echo "3a2a9bc763311dc434a1a834ba06ea5151d1b747fdbaa5f7787725be42290276  eksctl_Linux_amd64.tar.gz" | sha256sum --check
-        tar vxz eksctl_Linux_amd64.tar.gz && rm eksctl_Linux_amd64.tar.gz && chmod +x eksctl
+        tar -xf eksctl_Linux_amd64.tar.gz && rm eksctl_Linux_amd64.tar.gz && chmod +x eksctl
     - name: Install pre-requisites
       run: |
         curl -L https://dl.k8s.io/release/v1.21.9/bin/linux/amd64/kubectl -o kubectl \
