@@ -16,7 +16,7 @@ jobs:
       with:
         node-version: '17'
     - name: configure aws credentials
-      uses: aws-actions/configure-aws-credentials@v1
+      uses: aws-actions/configure-aws-credentials@master
       with:
         role-to-assume: arn:aws:iam::785487814634:role/github-actions-workshop-test
         role-session-name: GithubActionsSession
