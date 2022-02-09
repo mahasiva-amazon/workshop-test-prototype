@@ -49,7 +49,10 @@ async function main() {
     const result = await runMochaTests()
     console.log(result);
   }
-  catch (e) { console.log(e) }
+  catch (e) { 
+    console.log(e)
+    process.exit(1)
+  }
 }
 
 async function runTests(record, parentSuite) {
