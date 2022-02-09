@@ -1,0 +1,41 @@
+---
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: ${CLUSTER_NAME}
+  region: us-west-2
+  version: '1.21'
+
+managedNodeGroups:
+- name: base
+  availabilityZones: 
+  - us-west-2a
+  - us-west-2b
+  - us-west-2c
+  instanceType: t3a.large
+  desiredCapacity: 3
+  privateNetworking: true
+  ssh:
+    enableSsm: true
+
+iam:
+  withOIDC: true
+  serviceAccounts:
+  - metadata:
+      name: cluster-autoscaler
+      namespace: autoscaler
+    wellKnownPolicies:
+      autoScaler: true
+    roleName: ${CLUSTER_NAME}-cluster-autoscaler
+  - metadata:
+      name: aws-load-balancer-controller
+      namespace: kube-system
+    wellKnownPolicies:
+      awsLoadBalancerController: true
+    roleName: ${CLUSTER_NAME}-lb-controller
+
+availabilityZones:
+- us-west-2a
+- us-west-2b
+- us-west-2c
