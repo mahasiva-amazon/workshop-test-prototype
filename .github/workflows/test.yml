@@ -19,8 +19,10 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       with:
         role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
-        role-duration-seconds: 900
+        role-session-name: GithubActionsSession
+        #role-duration-seconds: 900
         aws-region: ${{ secrets.AWS_REGION }}
+    - run: aws sts get-caller-identity
     - name: Install eksctl
       run: |
         wget https://github.com/weaveworks/eksctl/releases/download/v0.82.0/eksctl_Linux_amd64.tar.gz
