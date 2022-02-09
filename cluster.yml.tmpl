@@ -27,13 +27,13 @@ iam:
       namespace: autoscaler
     wellKnownPolicies:
       autoScaler: true
-    roleName: ${CLUSTER_NAME}-cluster-autoscaler
+    roleName: eksctl-${CLUSTER_NAME}-cluster-autoscaler
   - metadata:
       name: aws-load-balancer-controller
       namespace: kube-system
     wellKnownPolicies:
       awsLoadBalancerController: true
-    roleName: ${CLUSTER_NAME}-lb-controller
+    roleName: eksctl-${CLUSTER_NAME}-lb-controller
 
 availabilityZones:
 - us-west-2a
