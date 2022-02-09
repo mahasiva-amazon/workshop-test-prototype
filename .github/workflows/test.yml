@@ -60,8 +60,10 @@ jobs:
         aws-region: ${{ secrets.AWS_REGION }}
         role-session-name: GithubActionsSession
     - run: npm install
+      working-directory: test
     - name: Run Tests
       run: CONTENT_PATH=../testcontent npm test
+      working-directory: test
     - name: Refresh AWS credentials
       if: always()
       uses: aws-actions/configure-aws-credentials@v1.6.1

@@ -50,7 +50,7 @@ async function main() {
     console.log(result);
   }
   catch (e) { 
-    console.log(e)
+    console.log(e) 
     process.exit(1)
   }
 }
