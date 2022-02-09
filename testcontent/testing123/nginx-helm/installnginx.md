@@ -97,7 +97,7 @@ Elastic Load Balancer (ELB).
 To get the complete URL of this Service, run:
 
 ```bash test=yes hook=install-nginx
-kubectl2 get service mywebserver-nginx -o wide
+kubectl4 get service mywebserver-nginx -o wide
 ```
 
 That should output something similar to:
