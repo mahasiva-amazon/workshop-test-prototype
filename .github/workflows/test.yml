@@ -20,27 +20,30 @@ jobs:
       with:
         node-version: '17'
     - name: configure aws credentials
-      uses: aws-actions/configure-aws-credentials@master
+      uses: aws-actions/configure-aws-credentials@v1.6.1
       with:
         role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
         role-duration-seconds: 900
         aws-region: ${{ secrets.AWS_REGION }}
         role-session-name: GithubActionsSession
-    - run: aws sts get-caller-identity
+    - name: Setup PATH
+      run: |
+       mkdir -p ${HOME}/.local/bin
+       echo "${HOME}/.local/bin" >> $GITHUB_PATH
     - name: Install eksctl
       run: |
         wget -q https://github.com/weaveworks/eksctl/releases/download/v0.82.0/eksctl_Linux_amd64.tar.gz
         echo "3a2a9bc763311dc434a1a834ba06ea5151d1b747fdbaa5f7787725be42290276  eksctl_Linux_amd64.tar.gz" | sha256sum --check
-        tar -xf eksctl_Linux_amd64.tar.gz && rm eksctl_Linux_amd64.tar.gz && chmod +x eksctl
+        tar -xf eksctl_Linux_amd64.tar.gz && chmod +x eksctl && mv eksctl ${HOME}/.local/bin
     - name: Install pre-requisites
       run: |
         curl -L https://dl.k8s.io/release/v1.21.9/bin/linux/amd64/kubectl -o kubectl \
               && echo "195d5387f2a6ca7b8ab5c2134b4b6cc27f29372f54b771947ba7c18ee983fbe6  kubectl" | sha256sum --check \
-              && mv kubectl /usr/bin/kubectl && chmod +x /usr/bin/kubectl \
-              && curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 \
-              && echo "0850e3b71cb80875947f8a1d63fc8c65384f60243969a9d06d2d6c5a1d25ecc6  get_helm.sh" | sha256sum --check \
-              && chmod 700 get_helm.sh && ./get_helm.sh && rm -f get_helm.sh \
-              && helm repo add stable https://charts.helm.sh/stable
+              && mv kubectl ${HOME}/.local/bin/kubectl && chmod +x ${HOME}/.local/bin/kubectl
+    - uses: azure/setup-helm@v2.0
+      with:
+        version: 'v3.8.0'
+      id: install
     - name: Init EKS cluster
       env:
         BUILD_ID: ${{ github.run_id }}
