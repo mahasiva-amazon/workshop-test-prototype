@@ -45,6 +45,7 @@ jobs:
         version: 'v3.8.0'
       id: install
     - name: Init EKS cluster
+      timeout-minutes: 60
       env:
         BUILD_ID: ${{ github.run_id }}
       run: |
@@ -56,6 +57,7 @@ jobs:
       run: CONTENT_PATH=../testcontent npm test
     - name: Cleanup
       if: always()
+      timeout-minutes: 30
       run: |
         if [ -f cluster.yml ]; then
           eksctl delete cluster -f cluster.yml
