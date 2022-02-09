@@ -63,6 +63,7 @@ jobs:
     - name: Run Tests
       run: CONTENT_PATH=../testcontent npm test
     - name: Refresh AWS credentials
+      if: always()
       uses: aws-actions/configure-aws-credentials@v1.6.1
       with:
         role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
