@@ -111,6 +111,7 @@ const gather_blocks = (tree, dir) => {
         let hook = null
 
         if(meta) {
+          // TODO: Change this to regex https://regex101.com/r/uB4sI9/1
           let params = meta.split(' ')
 
           if(params) {
