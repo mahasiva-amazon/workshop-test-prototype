@@ -10,6 +10,7 @@ const TITLE_KEY = 'title',
       WEIGHT_KEY = 'weight',
       TIMEOUT_KEY = 'timeout',
       WAIT_KEY = 'wait',
+      HOOK_KEY = 'hook',
       TEST_KEY = 'test'
 
 export default async function gatherer(dir) {
@@ -37,7 +38,7 @@ async function walk(dir, data) {
       await walk(itemPath, child);
 
     } else if(item.endsWith(".md")) {
-      let metadata = await read_markdown(itemPath)
+      let metadata = await read_markdown(itemPath, dir)
 
       if(metadata) {
         if(item === "_index.md") {
@@ -54,7 +55,7 @@ async function walk(dir, data) {
   return data;
 };
 
-async function read_markdown(file) {
+async function read_markdown(file, dir) {
   const data = await fs.promises.readFile(file, 'utf8')
 
   let metadata = {title: '', cases: [], weight: 0}
@@ -82,7 +83,7 @@ async function read_markdown(file) {
     return null;
   }
 
-  const blocks = gather_blocks(parsed)
+  const blocks = gather_blocks(parsed, dir)
 
   for(const block in blocks) {
     metadata.cases.push(blocks[block])
@@ -91,7 +92,7 @@ async function read_markdown(file) {
   return metadata;
 }
 
-const gather_blocks = (tree) => {
+const gather_blocks = (tree, dir) => {
   
   const { children } = tree
   let data = []
@@ -107,6 +108,7 @@ const gather_blocks = (tree) => {
         let add = false
         let wait = 0
         let timeout = 10
+        let hook = null
 
         if(meta) {
           let params = meta.split(' ')
@@ -129,6 +131,9 @@ const gather_blocks = (tree) => {
                   case TEST_KEY:
                     add = true
                     break;
+                  case HOOK_KEY:
+                      hook = value
+                      break;
                   default:
                     console.log(`Warning: Unrecognized param ${key} in code block`);
                 }
@@ -141,7 +146,9 @@ const gather_blocks = (tree) => {
           data.push({
             command: child.value,
             wait: wait,
-            timeout: timeout
+            timeout: timeout,
+            hook: hook,
+            dir: dir
           });
         }
       }

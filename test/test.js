@@ -100,15 +100,19 @@ async function runTest(test, suite) {
       
       if(this.failed === false) {
         try {
-          // TODO: Turn this in to debug setting
-          //console.log(`Running command: ${testCase.command}`)
+          if(env.DEBUG_MODE) {
+            console.log(`Running command: ${testCase.command}`)
+          }
 
           if (!env.SKIP_COMMANDS) {
-            // We prefix the command to make it catch errors more reliably
+            hook(testCase, 'before')
+
             const { stdout, stderr } = await exec('set -Eeuo pipefail\n'+testCase.command, {
               timeout: testCase.timeout * 1000,
               shell: '/bin/bash'
             });
+
+            hook(testCase, 'after')
           }
 
           if(testCase.wait > 0) {
@@ -134,6 +138,15 @@ async function runTest(test, suite) {
       }
     }
   }));
+}
+
+async function hook(testCase, hook) {
+  if(testCase.hook) {
+    await exec(`bash ${testCase.dir}/tests/hook-${testCase.hook}.sh ${hook}`, {
+      timeout: 120000,
+      shell: '/bin/bash'
+    });
+  }
 }
 
 async function sleep(ms) {

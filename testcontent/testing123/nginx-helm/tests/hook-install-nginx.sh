@@ -1,5 +1,11 @@
+set -Eeuo pipefail
+
+before() {
+  # NONE
+}
+
 after() {
-  echo "TEST A $1";
+  kubectl wait --for=condition=available --timeout=60s deployment/mywebserver-nginx
 }
 
 "$@"

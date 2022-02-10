@@ -24,7 +24,7 @@ documentation or run the `helm install --help` command to figure out the
 syntax.
 
 {{%expand "Expand here to see the solution" %}}
-```bash test=yes
+```bash test=yes hook=install-nginx
 helm install mywebserver bitnami/nginx
 ```
 {{% /expand %}}
@@ -96,7 +96,7 @@ Elastic Load Balancer (ELB).
 
 To get the complete URL of this Service, run:
 
-```bash test=yes hook=install-nginx
+```bash test=yes
 kubectl get service mywebserver-nginx -o wide
 ```
 
