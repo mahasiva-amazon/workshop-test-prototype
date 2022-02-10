@@ -22,7 +22,7 @@ mywebserver     default         1               2020-02-18 22:02:13.844416354 +0
 
 It was a lot of fun; we had some great times sending HTTP back and forth, but now its time to uninstall this deployment.  To uninstall:
 
-```bash test=yes
+```bash test=yes hook=uninstall-nginx
 helm uninstall mywebserver
 ```
 
@@ -33,7 +33,7 @@ release "mywebserver" uninstalled
 
 kubectl will also demonstrate that our pods and service are no longer available:
 
-```sh
+```bash test=yes
 kubectl get pods -l app.kubernetes.io/name=nginx
 kubectl get service mywebserver-nginx -o wide
 ```
